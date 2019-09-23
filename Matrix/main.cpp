@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 
     Matrix a(ar, 3);
     std::vector<double> b = { 1, 2, 3 };
-    //a[1][2] = 15;
+
     //double b1 = a[1][2];
     //a[1][2] = a[1][3];
     //const Matrix b(a);
