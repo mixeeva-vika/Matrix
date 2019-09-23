@@ -5,6 +5,13 @@ void help()
 {
     std::cout << "Enter the size of the matrix of type int" << std::endl;
     std::cout << "Then enter the matrix of this size" << std::endl;
+
+    std::cout << "It is look like : " << std::endl;
+    std::cout << "n " << std::endl;
+    std::cout << "a_{1,1} . . . a_{1,n} b_{1}" << std::endl;
+    std::cout << "a_{2,1} . . . a_{2,n} b_{2}" << std::endl;
+    std::cout << ". . .  . . .  . . .  . . . " << std::endl;
+    std::cout << "a_{n,1} . . . a_{n,n} b_{n}" << std::endl;
 }
 
 int main(int argc, char* argv[])
