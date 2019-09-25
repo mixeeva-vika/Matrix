@@ -1,5 +1,6 @@
 #include "JordanMethod.h"
 #include "FillingMatrix.h"
+#include<math.h>
 
 std::size_t MethodJordan::GetNumberMaxElem(Matrix& A, size_t col_num)
 {
@@ -14,6 +15,10 @@ std::size_t MethodJordan::GetNumberMaxElem(Matrix& A, size_t col_num)
             number = i;
         }
     }
+	if (max == 0)
+	{
+		throw "Degenerate matrix";
+	}
     return number;
 }
 
@@ -38,7 +43,6 @@ std::vector<double> MethodJordan::run(Matrix& A, std::vector<double> b)
     Matrix M = A;
     for (size_t i = 0; i < M.size(); ++i)
     {
-       // std::cout << "=================" << i << "==============" << std::endl;
         size_t max_num = GetNumberMaxElem(M, i);
         if (max_num != i)
         {
@@ -46,23 +50,13 @@ std::vector<double> MethodJordan::run(Matrix& A, std::vector<double> b)
             swap(b[i], b[max_num]);
         }
         double max_elem = M[i][i];
-        //std::cout << "After swap" << std::endl << M << std::endl;
-        //for(int idx = 0; idx < b.size(); ++idx)
-         //   std::cout << b[idx]<< " ";
-        //std::cout << std::endl;
-
+		
         for (size_t j = i; j < M.size(); ++j)
         {
             double new_elem = M[i][j] / max_elem;
             M[i][j] = new_elem;
         }
         b[i] = b[i] / max_elem;
-
-        //std::cout << "After current change" << std::endl << M << std::endl;
-        //for (int idx = 0; idx < b.size(); ++idx)
-        //    std::cout << b[idx] << " ";
-        //std::cout << std::endl;
-
 
         for (size_t k = 0; k < M.size(); ++k)
         {
@@ -74,17 +68,10 @@ std::vector<double> MethodJordan::run(Matrix& A, std::vector<double> b)
                 double new_elem = M[k][j] - coef * M[i][j];
                 M[k][j] = new_elem;
 
-                //std::cout << "new_elem = " << new_elem << std::endl << M << std::endl;
             }
 			b[k] = b[k] - coef * b[i];
         }
-
-        //std::cout << "After all" << std::endl << M << std::endl;
-        //for (int idx = 0; idx < b.size(); ++idx)
-        //    std::cout << b[idx] << std::endl;
-        //int ah = 5;
     }
-    //std::cout << M << std::endl;
 	std::vector<double> x(M.size());
 	for (size_t i = 0; i < x.size(); ++i)
 	{
@@ -94,6 +81,15 @@ std::vector<double> MethodJordan::run(Matrix& A, std::vector<double> b)
 	return x;
 }
 
+
+size_t MethodJordan::norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x)
+{
+	std::vector<double> res = Matrix::MultiplyMatrByVector(A, x);//////!!!!
+	double sum = 0;
+	for (size_t i = 0; i < res.size(); ++i)
+		sum += res[i] * res[i];
+	return sqrt(sum);
+}
 
 
 

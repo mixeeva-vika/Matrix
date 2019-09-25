@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         std::vector<double> x = MethodJordan::run(res.first, res.second);
+		std::cout << "Solution : " << std::endl;
         for (int i = 0; i < x.size(); ++i)
             std::cout << x[i] << " ";
         std::cout << std::endl;
@@ -58,26 +59,7 @@ int main(int argc, char* argv[])
     {
         std::cout << exp << std::endl;
     }
-    /*
-    double ar[] = {
-    1, 2, 3,
-    4, 15, 6,
-    7, 8, 9 };
-
-    Matrix a(ar, 3);
-    std::vector<double> b = { 1, 2, 3 };
-
-    //double b1 = a[1][2];
-    //a[1][2] = a[1][3];
-    //const Matrix b(a);
-    //b1 = b[0][1];
-    //std::pair<size_t, double> pair_ = MethodJordan::GetNumberMaxElem(a, 1);
-    //std::cout << pair_.first << " " << pair_.second << std::endl;
-    //MethodJordan::swap_row(a, 1, 2);
-    //std::cout << a << std::endl;
-    MethodJordan::run(a, b);
-    */
-
+    
     system("pause");
     return 0;
 }

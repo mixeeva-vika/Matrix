@@ -9,4 +9,5 @@ class MethodJordan
     static void swap(double& a, double& b);
 public:
     static std::vector<double> run(Matrix& A, std::vector<double> b);
+	size_t norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x);
 };

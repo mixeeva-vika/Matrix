@@ -11,4 +11,5 @@ class FillingData
 public:
     static std::pair<Matrix, std::vector<double>> FillingFromKeyboar();
     static std::pair<Matrix, std::vector<double>> FillingFromFile(char* filename);
+	static std::pair<Matrix, std::vector<double>> FillingWithFunc(size_t n);
 };
