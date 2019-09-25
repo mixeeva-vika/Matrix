@@ -49,16 +49,16 @@ Matrix& Matrix::operator=(const Matrix& M)
     return *this;
 }
 
-std::vector<double> Matrix::MultiplyMatrByVector(const Matrix& M, const std::vector<double>& x)
+std::vector<double> Matrix::operator*(const std::vector<double>& x) const
 {
-    size_t n = M.size();
+    size_t n = size();
     double sum = 0;
     std::vector<double> b(n);
     for (size_t i = 0; i < n; ++i)
     {
         for (size_t j = 0; j < n; ++j)
         {
-            sum += M[i][j] * x[j];
+            sum += (*this)[i][j] * x[j];
         }
         b[i] = sum;
     }

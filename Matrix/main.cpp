@@ -13,9 +13,25 @@ void help()
     std::cout << ". . .  . . .  . . .  . . . " << std::endl;
     std::cout << "a_{n,1} . . . a_{n,n} b_{n}" << std::endl;
 }
-
+int toInt(const char*s, int*xp)
+{
+    long l;
+    char* e;
+    errno = 0;
+    l = strtol(s, &e, 10);
+    if (!errno && *e == '\0')
+    {
+        if (INT_MIN <= l && l <= INT_MAX)
+        {
+            *xp = (int)l;
+            return 0; // Good
+        }
+    }
+    return -1; // Bad
+}
 int main(int argc, char* argv[])
 {
+    int flag = 0;
     try
     {
         std::pair<Matrix, std::vector<double>> res;
@@ -23,7 +39,16 @@ int main(int argc, char* argv[])
             throw "Incorrect number of argument";
         if (argc == 2)
         {
-            res = FillingData::FillingFromFile(argv[1]);
+            int xp;
+            if (toInt(argv[1], &xp) == -1)
+                res = FillingData::FillingFromFile(argv[1]);
+            else
+            {
+                if (xp < 1)
+                    throw "Incorrect data";
+                flag = 1;
+                res = FillingData::FillingWithFunc(xp);
+            }
         }
         if (argc == 1)
         {
@@ -41,8 +66,7 @@ int main(int argc, char* argv[])
                 }
             }
         }
-        //std::pair<Matrix, std::vector<double>> res;
-        //res = FillingData::FillingFromFile("a.txt");
+        
         std::cout << res.first << std::endl;
 
         for (int i = 0; i < res.second.size(); ++i)
@@ -50,10 +74,16 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         std::vector<double> x = MethodJordan::run(res.first, res.second);
-		std::cout << "Solution : " << std::endl;
-        for (int i = 0; i < x.size(); ++i)
-            std::cout << x[i] << " ";
-        std::cout << std::endl;
+        std::cout << "Solution : " << std::endl;
+        size_t m = 30;
+        MethodJordan::print(x, m);
+        std::cout << "Residual : " << std::endl;
+        std::cout << MethodJordan::norm(res.first, res.second, x) << std::endl;
+        if (flag == 1)
+        {
+            for (size_t i = 0; i < x.size(); ++i)
+                std::cout << x[i] << std::endl;
+        }
     }
     catch (char* exp)
     {

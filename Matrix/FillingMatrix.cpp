@@ -64,17 +64,19 @@ std::pair<Matrix, std::vector<double>> FillingData::FillingFromFile(char* filena
 std::pair<Matrix, std::vector<double>> FillingData::FillingWithFunc(size_t n)
 {
 	Matrix A(n);
-	std::vector<double> b;
+	std::vector<double> b(n);
 	b[0] = 1;
 	for (size_t i = 0; i < n; ++i)
 	{
 		for (size_t j = 0; j < n; ++j)
 		{
-			A[i][j] = 1. / (i + j + 1);//
+			A[i][j] = 1. / (i + j + 1);
 		}
 	}
 	for (size_t i = 1; i < n; ++i)
 		b[i] = 0;
+    
+    return std::make_pair(A, b);
 }
 
 

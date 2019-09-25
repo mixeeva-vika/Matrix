@@ -17,7 +17,7 @@ std::size_t MethodJordan::GetNumberMaxElem(Matrix& A, size_t col_num)
     }
 	if (max == 0)
 	{
-		throw "Degenerate matrix";
+		throw "Singular matrix";
 	}
     return number;
 }
@@ -84,14 +84,26 @@ std::vector<double> MethodJordan::run(Matrix& A, std::vector<double> b)
 
 size_t MethodJordan::norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x)
 {
-	std::vector<double> res = Matrix::MultiplyMatrByVector(A, x);//////!!!!
+	std::vector<double> res = A * x;
+    for (size_t i = 0; i < res.size(); ++i)
+        res[i] -= b[i];
 	double sum = 0;
 	for (size_t i = 0; i < res.size(); ++i)
 		sum += res[i] * res[i];
 	return sqrt(sum);
 }
 
+size_t MethodJordan::min(size_t n1, size_t n2)
+{
+    return (n1 > n2) ? n2 : n1;
+}
 
+void MethodJordan::print(const std::vector<double>& x, size_t m)
+{
+    for (size_t i = 0; i < min(m, x.size()); ++i)
+        std::cout << x[i] << " ";
+    std::cout << std::endl;
+}
 
 
 

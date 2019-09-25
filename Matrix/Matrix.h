@@ -20,7 +20,7 @@ public:
     ProxyVector operator[](int i) const;
     size_t size() const { return n; }
 
-    static std::vector<double> MultiplyMatrByVector(const Matrix& M, const std::vector<double>& x);//////!!!
+    std::vector<double> operator*(const std::vector<double>& x) const;//////!!!
 
     friend std::ostream& operator<<(std::ostream& out, const Matrix& S);
     friend ProxyVector;
