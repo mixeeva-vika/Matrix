@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
                 if (xp < 1)
                     throw "Incorrect data";
                 flag = 1;
-                res = FillingData::FillingWithFunc(xp);
+                res = FillingData::FillingWithFunc_1(xp);
             }
         }
         if (argc == 1)
@@ -82,7 +82,8 @@ int main(int argc, char* argv[])
         if (flag == 1)
         {
             for (size_t i = 0; i < x.size(); ++i)
-                std::cout << x[i] << std::endl;
+                std::cout << x[i] << " ";
+			std::cout << std::endl;
         }
     }
     catch (char* exp)
