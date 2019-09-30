@@ -52,10 +52,11 @@ Matrix& Matrix::operator=(const Matrix& M)
 std::vector<double> Matrix::operator*(const std::vector<double>& x) const
 {
     size_t n = size();
-    double sum = 0;
+    double sum;
     std::vector<double> b(n);
     for (size_t i = 0; i < n; ++i)
     {
+        sum = 0;
         for (size_t j = 0; j < n; ++j)
         {
             sum += (*this)[i][j] * x[j];

@@ -10,6 +10,6 @@ class MethodJordan
     static size_t min(size_t n1, size_t n2);
 public:
     static std::vector<double> run(Matrix& A, std::vector<double> b);
-	static size_t norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x);
+	static double norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x);
     static void print(const std::vector<double>& x, size_t m);
 };

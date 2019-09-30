@@ -35,20 +35,39 @@ int main(int argc, char* argv[])
     try
     {
         std::pair<Matrix, std::vector<double>> res;
-        if (argc > 2)
+        if (argc > 3)
             throw "Incorrect number of argument";
         if (argc == 2)
         {
-            int xp;
-            if (toInt(argv[1], &xp) == -1)
-                res = FillingData::FillingFromFile(argv[1]);
-            else
+            res = FillingData::FillingFromFile(argv[1]);
+        }
+        if (argc == 3)
+        {
+            int xp1; //размер матрицы
+            int xp2; //тип заполнения
+            if (toInt(argv[1], &xp1) == -1)
+                throw "Incorrect data";
+            if (xp1 < 1)
+                throw "Incorrect data";
+            if (toInt(argv[2], &xp2) == -1)
+                throw "Incorrect data";
+            if (xp2 == 1)
             {
-                if (xp < 1)
-                    throw "Incorrect data";
+                res = FillingData::FillingWithFunc1(xp1);
                 flag = 1;
-                res = FillingData::FillingWithFunc_1(xp);
             }
+            else if (xp2 == 2)
+            {
+                res = FillingData::FillingWithFunc2(xp1);
+                flag = 2;
+            }
+            else if (xp2 == 3)
+            {
+                res = FillingData::FillingWithFunc3(xp1);
+                flag = 3;
+            }
+            else
+                throw "Incorrect data";
         }
         if (argc == 1)
         {
@@ -67,23 +86,49 @@ int main(int argc, char* argv[])
             }
         }
         
-        std::cout << res.first << std::endl;
+        //std::cout << res.first << std::endl;
 
         for (int i = 0; i < res.second.size(); ++i)
             std::cout << res.second[i] << " ";
         std::cout << std::endl;
 
         std::vector<double> x = MethodJordan::run(res.first, res.second);
+
         std::cout << "Solution : " << std::endl;
         size_t m = 30;
         MethodJordan::print(x, m);
+
         std::cout << "Residual : " << std::endl;
         std::cout << MethodJordan::norm(res.first, res.second, x) << std::endl;
+
+        std::vector<double> golden_x;
         if (flag == 1)
         {
-            for (size_t i = 0; i < x.size(); ++i)
-                std::cout << x[i] << " ";
-			std::cout << std::endl;
+            golden_x = FillingData::GenerateX1(x.size());
+        }
+        else if (flag == 2)
+        {
+            golden_x = FillingData::GenerateX2(x.size());
+        }
+        else if (flag == 3)
+        {
+            golden_x = FillingData::GenerateX3(x.size());
+        }
+        else
+        {
+            throw "Incorrect flag";
+        }
+        std::cout << MethodJordan::norm(res.first, res.second, golden_x) << std::endl;
+        double epsilon = 0.0000001;
+
+        double diff = FillingData::CheckAnswers(x, golden_x);
+        if (diff < epsilon)
+        {
+            std::cout << "Answers are the same" << std::endl;
+        }
+        else
+        {
+            std::cout << "Answers are not the same. Difference = " << diff << std::endl;
         }
     }
     catch (char* exp)

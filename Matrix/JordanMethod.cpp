@@ -82,9 +82,13 @@ std::vector<double> MethodJordan::run(Matrix& A, std::vector<double> b)
 }
 
 
-size_t MethodJordan::norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x)
+double MethodJordan::norm(const Matrix& A, const std::vector<double>& b, const std::vector<double>& x)
 {
 	std::vector<double> res = A * x;
+    std::cout << " A * x" << std::endl;
+    for (size_t i = 0; i < res.size(); ++i)
+       std::cout << res[i] << " ";
+    std::cout << std::endl;
     for (size_t i = 0; i < res.size(); ++i)
         res[i] -= b[i];
 	double sum = 0;
