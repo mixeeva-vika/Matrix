@@ -85,9 +85,10 @@ int main(int argc, char* argv[])
                 }
             }
         }
-        
-        //std::cout << res.first << std::endl;
+		std::cout << "Matrix : " << std::endl;
+        std::cout << res.first << std::endl;
 
+		std::cout << "b : " << std::endl;
         for (int i = 0; i < res.second.size(); ++i)
             std::cout << res.second[i] << " ";
         std::cout << std::endl;
@@ -101,35 +102,35 @@ int main(int argc, char* argv[])
         std::cout << "Residual : " << std::endl;
         std::cout << MethodJordan::norm(res.first, res.second, x) << std::endl;
 
-        std::vector<double> golden_x;
-        if (flag == 1)
-        {
-            golden_x = FillingData::GenerateX1(x.size());
-        }
-        else if (flag == 2)
-        {
-            golden_x = FillingData::GenerateX2(x.size());
-        }
-        else if (flag == 3)
-        {
-            golden_x = FillingData::GenerateX3(x.size());
-        }
-        else
-        {
-            throw "Incorrect flag";
-        }
-        std::cout << MethodJordan::norm(res.first, res.second, golden_x) << std::endl;
-        double epsilon = 0.0000001;
+        //std::vector<double> golden_x;
+        //if (flag == 1)
+        //{
+        //    golden_x = FillingData::GenerateX1(x.size());
+        //}
+        //else if (flag == 2)
+        //{
+        //    golden_x = FillingData::GenerateX2(x.size());
+        //}
+        //else if (flag == 3)
+        //{
+        //    golden_x = FillingData::GenerateX3(x.size());
+        //}
+        //else
+        //{
+        //    throw "Incorrect flag";
+        //}
+        //std::cout << MethodJordan::norm(res.first, res.second, golden_x) << std::endl;
+        //double epsilon = 0.0000001;
 
-        double diff = FillingData::CheckAnswers(x, golden_x);
-        if (diff < epsilon)
-        {
-            std::cout << "Answers are the same" << std::endl;
-        }
-        else
-        {
-            std::cout << "Answers are not the same. Difference = " << diff << std::endl;
-        }
+        //double diff = FillingData::CheckAnswers(x, golden_x);
+        //if (diff < epsilon)
+        //{
+        //    std::cout << "Answers are the same" << std::endl;
+        //}
+        //else
+        //{
+        //    std::cout << "Answers are not the same. Difference = " << diff << std::endl;
+        //}
     }
     catch (char* exp)
     {
