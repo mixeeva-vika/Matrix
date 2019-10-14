@@ -67,6 +67,29 @@ std::vector<double> Matrix::operator*(const std::vector<double>& x) const
     return b;
 }
 
+std::vector<double> Matrix::MultiplyPartOfMatrix(const std::vector<double>& x, int thread_num, int nthreads) const
+{
+    /* Первая участвующая строка матрицы */
+    int first_row = n * thread_num;
+    first_row /= nthreads;
+    /* Последняя участвующая строка матрицы */
+    int last_row = n * (thread_num + 1);
+    last_row = last_row / nthreads - 1;
+
+    std::vector<double> res(last_row - first_row + 1);
+    double* p = matrix + first_row * n;
+    int k = 0;
+    for (int i = first_row; i <= last_row; i++)
+    {
+        double s = 0;
+        for (int j = 0; j < n; j++)
+            s += *(p++) * x[j];
+        res[k] = s;
+        ++k;
+    }
+    return res;
+}
+
 ProxyVector Matrix::operator[](int i) const
 {
     return ProxyVector(this, i);

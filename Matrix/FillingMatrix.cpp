@@ -85,21 +85,31 @@ std::pair<Matrix, std::vector<double>> FillingData::FillingWithFunc2(size_t n)
 	std::vector<double> b(n);
 	for (size_t i = 0; i < n; ++i)
 	{
+        using namespace std;
+        //cout << "i = " << i << endl;
 		for (size_t j = 0; j < n; ++j)
 		{
 			if (j == i)
 			{
 				if (i == 0)
 					A[i][j] = -1;
-				if (i == n - 1)
+				else if (i == n - 1)
 					A[i][j] = -((double)(n - 1) / n);
-				A[i][j] = -2;
+                else
+				    A[i][j] = -2;
 			}
-			if ((j == i + 1) || (j = i - 1))
-				A[i][j] = 1;
-			else
-				A[i][j] = 0;
+            else
+            {
+                if ((j == i + 1) || (j == i - 1))
+                    A[i][j] = 1;
+                else
+                    A[i][j] = 0;
+            }
+            //cout << "j = " << i << endl;
+            //cout << A << endl;
 		}
+        
+      
 	}
 	for (size_t i = 0; i < n - 1; ++i)
 		b[i] = 0;

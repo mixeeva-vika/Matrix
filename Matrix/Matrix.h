@@ -20,8 +20,8 @@ public:
     ProxyVector operator[](int i) const;
     size_t size() const { return n; }
 
-    std::vector<double> operator*(const std::vector<double>& x) const;//////!!!
-
+    std::vector<double> operator*(const std::vector<double>& x) const;
+    std::vector<double> MultiplyPartOfMatrix(const std::vector<double>& x, int thread_num, int nthreads) const;
     friend std::ostream& operator<<(std::ostream& out, const Matrix& S);
     friend ProxyVector;
 };

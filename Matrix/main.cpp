@@ -1,5 +1,10 @@
 #include "JordanMethod.h"
 #include "FillingMatrix.h"
+#include <time.h>
+#include <chrono>
+
+/* Суммарное время работы всех задач */
+static long int threads_total_time = 0;
 
 void help()
 {
@@ -31,17 +36,24 @@ int toInt(const char*s, int*xp)
 }
 int main(int argc, char* argv[])
 {
+    /* число создаваемых задач */
+    int nthreads;
+    /* астрономическое время работы всего процесса */
+    long int t_full;
+
     int flag = 0;
     try
     {
         std::pair<Matrix, std::vector<double>> res;
-        if (argc > 3)
+        if (argc > 4)
             throw "Incorrect number of argument";
-        if (argc == 2)
+        if (argc == 3)
         {
             res = FillingData::FillingFromFile(argv[1]);
+            if (toInt(argv[2], &nthreads) == -1)
+                throw "Incorrect data";
         }
-        if (argc == 3)
+        if (argc == 4)
         {
             int xp1; //размер матрицы
             int xp2; //тип заполнения
@@ -68,9 +80,13 @@ int main(int argc, char* argv[])
             }
             else
                 throw "Incorrect data";
+            if (toInt(argv[3], &nthreads) == -1)
+                throw "Incorrect data";
         }
-        if (argc == 1)
+        if (argc == 2)
         {
+            if (toInt(argv[1], &nthreads) == -1)
+                throw "Incorrect data";
             help();
             for (;;)
             {
@@ -88,48 +104,69 @@ int main(int argc, char* argv[])
         
         //std::cout << res.first << std::endl;
 
-        for (int i = 0; i < res.second.size(); ++i)
-            std::cout << res.second[i] << " ";
-        std::cout << std::endl;
-
-        std::vector<double> x = MethodJordan::run(res.first, res.second);
-
+        //for (int i = 0; i < res.second.size(); ++i)
+        //    std::cout << res.second[i] << " ";
+        //std::cout << std::endl;
+        Matrix& A = res.first;
+        std::cout << A << std::endl;
+        std::vector<double>& b = res.second;
+        //std::cout << std::endl;
+        std::vector<double> x = MethodJordan::run(A, b);
         std::cout << "Solution : " << std::endl;
         size_t m = 30;
         MethodJordan::print(x, m);
 
-        std::cout << "Residual : " << std::endl;
-        std::cout << MethodJordan::norm(res.first, res.second, x) << std::endl;
+        //clock_t t0 = clock();
+        //double residual = MethodJordan::norm(res.first, res.second, x);
+        //clock_t t1 = clock();
+        //double time_seconds = (t1 - t0)/CLK_TCK;
 
-        std::vector<double> golden_x;
-        if (flag == 1)
-        {
-            golden_x = FillingData::GenerateX1(x.size());
-        }
-        else if (flag == 2)
-        {
-            golden_x = FillingData::GenerateX2(x.size());
-        }
-        else if (flag == 3)
-        {
-            golden_x = FillingData::GenerateX3(x.size());
-        }
-        else
-        {
-            throw "Incorrect flag";
-        }
-        std::cout << MethodJordan::norm(res.first, res.second, golden_x) << std::endl;
-        double epsilon = 0.0000001;
+        auto begin = std::chrono::high_resolution_clock::now();
+        double residual = MethodJordan::norm(A, b, x);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::cout << "Residual : " << residual << std::endl;
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << "ns" << std::endl;
+        
+        double residual2 = MethodJordan::ResidualThreads(A, b, x, nthreads);
+        std::cout << "Residual2 : " << residual2 << std::endl;        
+        //std::vector<double> part = A.MultiplyPartOfMatrix(x, 2, 4);
+        //MethodJordan::print(part, m);
 
-        double diff = FillingData::CheckAnswers(x, golden_x);
-        if (diff < epsilon)
-        {
-            std::cout << "Answers are the same" << std::endl;
-        }
-        else
-        {
-            std::cout << "Answers are not the same. Difference = " << diff << std::endl;
-        }
+        //t_full = get_full_time() - t_full;
+        //if (t_full == 0)
+        //    t_full = 1; /* очень быстрый компьютер... */
+
+        //std::cout << "time : " << time_seconds << " seconds" << std::endl;
+
+        //std::vector<double> golden_x;
+        //if (flag == 1)
+        //{
+        //    golden_x = FillingData::GenerateX1(x.size());
+        //}
+        //else if (flag == 2)
+        //{
+        //    golden_x = FillingData::GenerateX2(x.size());
+        //}
+        //else if (flag == 3)
+        //{
+        //    golden_x = FillingData::GenerateX3(x.size());
+        //}
+        //else
+        //{
+        //    throw "Incorrect flag";
+        //}
+        //std::cout << MethodJordan::norm(res.first, res.second, golden_x) << std::endl;
+        //double epsilon = 0.0000001;
+
+        //double diff = FillingData::CheckAnswers(x, golden_x);
+        //if (diff < epsilon)
+        //{
+        //    std::cout << "Answers are the same" << std::endl;
+        //}
+        //else
+        //{
+        //    std::cout << "Answers are not the same. Difference = " << diff << std::endl;
+        //}
     }
     catch (char* exp)
     {
